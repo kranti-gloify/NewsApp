@@ -80,12 +80,12 @@ const CustomDrawer = () => {
         navigation.navigate('TOS');
       },
     },
-    // {
-    //   label: t('components.drawer.text.about_items.contact_us'),
-    //   onPress: () => {
-    //     navigation.navigate('ContactUs');
-    //   },
-    // },
+    {
+      label: t('components.drawer.text.about_items.contact_us'),
+      onPress: () => {
+        navigation.navigate('ContactUs');
+      },
+    },
     // {
     //   label: t('components.drawer.text.about_items.feedback'),
     //   onPress: () => {
