@@ -16,6 +16,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: verticalScale(10),
     paddingHorizontal: horizontalScale(16),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header: {
     flexDirection: 'row',
@@ -58,6 +60,16 @@ const styles = StyleSheet.create({
   },
   btnWrapper: {
     marginTop: verticalScale(20),
+  },
+  scrollContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  absoluteLoader: {
+    position: 'absolute',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

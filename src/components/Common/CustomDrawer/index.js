@@ -86,12 +86,12 @@ const CustomDrawer = () => {
         navigation.navigate('ContactUs');
       },
     },
-    // {
-    //   label: t('components.drawer.text.about_items.feedback'),
-    //   onPress: () => {
-    //     navigation.navigate('Feedback');
-    //   },
-    // },
+    {
+      label: t('components.drawer.text.about_items.feedback'),
+      onPress: () => {
+        navigation.navigate('Feedback');
+      },
+    },
   ];
 
   const handleCancel = () => {

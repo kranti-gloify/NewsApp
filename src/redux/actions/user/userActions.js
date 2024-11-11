@@ -12,6 +12,7 @@ import {
   SET_LANGUAGE,
   SET_DOWNLOADS,
   REMOVE_DOWNLOADS,
+  SET_FEEDBACK,
 } from './userActionTypes';
 
 export const saveUserData = ({id, name, email, contact}) => ({
@@ -75,4 +76,9 @@ export const setDownloads = ({item, details}) => ({
 export const removeDownloads = ({item, title}) => ({
   type: REMOVE_DOWNLOADS,
   payload: {item, title},
+});
+
+export const saveFeedback = ({status, data}) => ({
+  type: SET_FEEDBACK,
+  payload: {status, data},
 });

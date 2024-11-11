@@ -5,6 +5,7 @@ import {
   REMOVE_DOWNLOADS,
   REMOVE_REACTIONS,
   SET_DOWNLOADS,
+  SET_FEEDBACK,
   SET_LANGUAGE,
   SET_LOGIN,
   SET_LOGOUT,
@@ -41,6 +42,14 @@ const initialState = {
     downloads: {
       magazines: [],
       newspapers: [],
+    },
+    feedback: {
+      status: false,
+      data: {
+        rating: 0,
+        comment: '',
+        email: '',
+      },
     },
   },
 };
@@ -146,6 +155,14 @@ export default function userReducer(state = initialState, action) {
               download => download.title !== action.payload.title,
             ),
           },
+        },
+      };
+    case SET_FEEDBACK:
+      return {
+        ...state,
+        additional: {
+          ...state.additional,
+          feedback: action.payload,
         },
       };
     default:

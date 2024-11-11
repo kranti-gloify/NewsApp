@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -13,16 +13,31 @@ import {ICONS} from '../../../constants';
 import {moderateScale, verticalScale} from '../../../styles/metrics';
 import {FONT_SIZE_16} from '../../../styles/fontSize';
 import {useTheme} from '@react-navigation/native';
-import {Button} from '../../../components/Common';
+import {Button, Snackbar} from '../../../components/Common';
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
+import {saveUserFeedback} from '../../../utils/helpers';
+import {useDispatch, useSelector} from 'react-redux';
+import {saveFeedback} from '../../../redux/actions/user/userActions';
 
 const Feedback = ({navigation}) => {
   const {colors} = useTheme();
   const {t} = useTranslation();
+  const dispatch = useDispatch();
+  const feedbackData = useSelector(state => state.user.additional.feedback);
+
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
   const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+  const [snackBarType, setSnackBarType] = useState('error');
+
+  useEffect(() => {
+    setRating(feedbackData.data.rating);
+    setFeedback(feedbackData.data.comment);
+    setEmail(feedbackData.data.email);
+  }, [feedbackData]);
 
   const renderStars = () => {
     const stars = [];
@@ -31,7 +46,8 @@ const Feedback = ({navigation}) => {
         <TouchableOpacity
           key={i}
           onPress={() => setRating(i)}
-          style={styles.starButton}>
+          style={styles.starButton}
+          disabled={feedbackData.status}>
           <Image
             source={i <= rating ? ICONS.STAR_FILL : ICONS.STAR}
             style={[styles.star, i <= rating ? {} : {tintColor: 'lightgray'}]}
@@ -40,6 +56,44 @@ const Feedback = ({navigation}) => {
       );
     }
     return stars;
+  };
+
+  const handleSubmit = async () => {
+    if (rating === 0) {
+      setSnackBarType('error');
+      setMessage('Please select rating!');
+      setIsVisible(true);
+    } else {
+      if (!feedback || !email) {
+        setSnackBarType('error');
+        setMessage('Please fill all the details!');
+        setIsVisible(true);
+      } else {
+        const response = await saveUserFeedback({
+          rating: rating,
+          feedback: feedback,
+          email: email,
+        });
+        const data = {
+          rating: rating,
+          comment: feedback,
+          email: email,
+        };
+        if (response.status === 'Success') {
+          setSnackBarType('success');
+          setMessage('Feedback submitted successfully!');
+          setIsVisible(true);
+          dispatch(saveFeedback({status: true, data: data}));
+          setTimeout(() => {
+            navigation.goBack();
+          }, 1000);
+        } else {
+          setSnackBarType('error');
+          setMessage(response.message);
+          setIsVisible(true);
+        }
+      }
+    }
   };
 
   return (
@@ -89,6 +143,7 @@ const Feedback = ({navigation}) => {
               styles.feedbackInput,
               {backgroundColor: colors.inputBackground},
             ]}
+            editable={!feedbackData.status}
             placeholder={t(
               'screens.feedback.text.input.experience_placeholder',
             )}
@@ -111,6 +166,7 @@ const Feedback = ({navigation}) => {
               styles.emailInput,
               {backgroundColor: colors.inputBackground},
             ]}
+            editable={!feedbackData.status}
             placeholder={t('screens.feedback.text.input.email_placeholder')}
             placeholderTextColor="#CCCCCC"
             keyboardType="email-address"
@@ -122,15 +178,33 @@ const Feedback = ({navigation}) => {
       <View style={styles.btnWrapper}>
         <Button
           text={t('screens.feedback.text.btn.submit')}
-          bgColor={colors.btnBackground}
+          bgColor={
+            feedbackData?.status
+              ? colors.disableBtnBackground
+              : colors.btnBackground
+          }
           width={'100%'}
           height={verticalScale(55)}
           variant="elevated"
           borderRadius={moderateScale(30)}
           textSize={FONT_SIZE_16}
           weight="bold"
+          onPress={handleSubmit}
+          disable={feedbackData?.status}
         />
       </View>
+      <Snackbar
+        backgroundColor={colors.snackBar}
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        message={message}
+        actionText={'Dismiss'}
+        onActionPress={() => setIsVisible(false)}
+        position="top"
+        textColor={colors.snackBarTxt}
+        actionTextColor={colors.snackBar}
+        type={snackBarType}
+      />
     </KeyboardAvoidingView>
   );
 };

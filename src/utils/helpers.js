@@ -174,3 +174,51 @@ export const formatStockMarketData = data => {
   ).toFixed(2);
   return {price, change, percentageChange};
 };
+
+export const saveUserEnquiry = async data => {
+  try {
+    // Add a new document with a generated ID
+    await firestore()
+      .collection('enquiries') // Replace with your collection name
+      .add({
+        fullName: data.name,
+        mobile: data.mobile,
+        email: data.email,
+        message: data.message,
+        createdAt: firestore.FieldValue.serverTimestamp(), // Optional: timestamp
+      });
+
+    return {
+      message: 'We will get in touch with you shortly!',
+      status: 'Success',
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: 'Server Error! Try after some time',
+      status: 'Error',
+    };
+  }
+};
+
+export const saveUserFeedback = async data => {
+  try {
+    // Submit feedback to Firestore
+    await firestore().collection('feedbacks').add({
+      rating: data.rating,
+      feedback: data.feedback,
+      email: data.email,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    });
+    return {
+      message: 'Feedback Submitted!',
+      status: 'Success',
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      message: 'Server Error! Please try again',
+      status: 'Error',
+    };
+  }
+};

@@ -8,6 +8,7 @@ import {
   Image,
   ScrollView,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import {ICONS} from '../../../constants';
 import {
@@ -15,9 +16,10 @@ import {
   moderateScale,
   verticalScale,
 } from '../../../styles/metrics';
-import {Button} from '../../../components/Common';
+import {Button, Loader, Snackbar} from '../../../components/Common';
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
+import {saveUserEnquiry} from '../../../utils/helpers';
 
 const ContactUs = ({navigation}) => {
   const {colors} = useTheme();
@@ -26,13 +28,45 @@ const ContactUs = ({navigation}) => {
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+  const [snackbarMsg, setSnackbarMsg] = useState('');
+  const [snackBarType, setSnackBarType] = useState('error');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    console.log('Name:', name);
-    console.log('Mobile:', mobile);
-    console.log('Email:', email);
-    console.log('Message:', message);
+  const handleSubmit = async () => {
+    setLoading(true);
+    // Handle form submission logic
+    if (!name || !mobile || !email || !message) {
+      setLoading(false);
+      setSnackBarType('error');
+      setSnackbarMsg('Please, fill all the details!');
+      setIsVisible(true);
+      return;
+    }
+    const response = await saveUserEnquiry({
+      name: name,
+      mobile: mobile,
+      email: email,
+      message: message,
+    });
+    if (response.status === 'Success') {
+      setLoading(false);
+      setSnackBarType('success');
+      setSnackbarMsg(response.message);
+      setIsVisible(true);
+      setEmail('');
+      setName('');
+      setMobile('');
+      setMessage('');
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1000);
+    } else {
+      setLoading(false);
+      setSnackBarType('error');
+      setSnackbarMsg(response.message);
+      setIsVisible(true);
+    }
   };
 
   return (
@@ -118,6 +152,23 @@ const ContactUs = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
+      <Snackbar
+        backgroundColor={colors.snackBar}
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        message={snackbarMsg}
+        actionText={'Dismiss'}
+        onActionPress={() => setIsVisible(false)}
+        position="top"
+        textColor={colors.snackBarTxt}
+        actionTextColor={colors.snackBar}
+        type={snackBarType}
+      />
+      {loading && (
+        <View style={styles.absoluteLoader}>
+          <Loader />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 };
