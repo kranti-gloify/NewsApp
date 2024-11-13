@@ -170,7 +170,7 @@ const CustomDrawer = () => {
                   trackColor={{true: 'green', false: '#a0a0a0'}}
                 />
               </TouchableOpacity>
-              {/* <Pressable
+              <Pressable
                 style={styles.menuItem}
                 android_ripple={{
                   color: 'lightgray',
@@ -184,7 +184,7 @@ const CustomDrawer = () => {
                 <Text style={[styles.menuLabel, {color: colors.drawerLabel}]}>
                   {t('components.drawer.text.downloads')}
                 </Text>
-              </Pressable> */}
+              </Pressable>
               {/* <Pressable
                 style={styles.menuItem}
                 android_ripple={{

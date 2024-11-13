@@ -4,6 +4,7 @@ import {
   CHANGE_NAVIGATE_FROM,
   REMOVE_DOWNLOADS,
   REMOVE_REACTIONS,
+  REMOVE_TICKER,
   SET_DOWNLOADS,
   SET_FEEDBACK,
   SET_LANGUAGE,
@@ -12,6 +13,7 @@ import {
   SET_NEWS_TOPICS,
   SET_REACTIONS,
   SET_THEME,
+  SET_TICKER,
   SET_USER_DATA,
   SET_USERS_REACTIONS,
 } from '../actions/user/userActionTypes';
@@ -43,6 +45,10 @@ const initialState = {
       magazines: [],
       newspapers: [],
     },
+    tickers: {
+      SportsTicker: true,
+      StocksTicker: true,
+    },
     feedback: {
       status: false,
       data: {
@@ -53,8 +59,6 @@ const initialState = {
     },
   },
 };
-
-console.log('Current downloads state:', initialState.additional.downloads);
 
 export default function userReducer(state = initialState, action) {
   switch (action.type) {
@@ -163,6 +167,28 @@ export default function userReducer(state = initialState, action) {
         additional: {
           ...state.additional,
           feedback: action.payload,
+        },
+      };
+    case SET_TICKER:
+      return {
+        ...state,
+        additional: {
+          ...state.additional,
+          tickers: {
+            ...state.additional.tickers,
+            [action.payload]: true,
+          },
+        },
+      };
+    case REMOVE_TICKER:
+      return {
+        ...state,
+        additional: {
+          ...state.additional,
+          tickers: {
+            ...state.additional.tickers,
+            [action.payload]: false,
+          },
         },
       };
     default:

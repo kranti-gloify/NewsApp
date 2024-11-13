@@ -12,3 +12,5 @@ export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const SET_DOWNLOADS = 'SET_DOWNLOADS';
 export const REMOVE_DOWNLOADS = 'REMOVE_DOWNLOADS';
 export const SET_FEEDBACK = 'SET_FEEDBACK';
+export const SET_TICKER = 'SET_TICKER';
+export const REMOVE_TICKER = 'REMOVE_TICKER';

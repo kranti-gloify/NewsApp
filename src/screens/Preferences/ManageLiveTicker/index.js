@@ -13,6 +13,8 @@ import {useTheme} from '@react-navigation/native';
 import {StockBanner, SportsBanner} from '../../../components/Common';
 import {moderateScale} from '../../../styles/metrics';
 import {useTranslation} from 'react-i18next';
+import {useDispatch, useSelector} from 'react-redux';
+import {removeTicker, setTicker} from '../../../redux/actions/user/userActions';
 
 const ManageButton = ({bgColor, source, onPress, tintColor}) => (
   <Pressable
@@ -34,14 +36,15 @@ const Dragger = ({source, onLongPress, onPressOut}) => (
 const ManageLiveTicker = ({navigation}) => {
   const {colors} = useTheme();
   const {t} = useTranslation();
-  const [ticker1Visible, setTicker1Visible] = useState(true);
-  const [ticker2Visible, setTicker2Visible] = useState(true);
 
   const [isTicker1Draggable, setIsTicker1Draggable] = useState(false);
   const [isTicker2Draggable, setIsTicker2Draggable] = useState(false);
 
   const ticker1Position = useRef(new Animated.ValueXY({x: 0, y: 0})).current;
-  const ticker2Position = useRef(new Animated.ValueXY({x: 0, y: 0})).current;
+  const ticker2Position = useRef(new Animated.ValueXY({x: 0, y: 50})).current;
+
+  const dispatch = useDispatch();
+  const tickers = useSelector(state => state.user.additional.tickers);
 
   const swapPositions = () => {
     // Get current y positions dynamically
@@ -140,10 +143,14 @@ const ManageLiveTicker = ({navigation}) => {
               },
             ]}>
             <ManageButton
-              bgColor={ticker1Visible ? colors.border : 'lightgray'}
-              source={ticker1Visible ? ICONS.MINUS : ICONS.PLUS}
-              onPress={() => setTicker1Visible(!ticker1Visible)}
-              tintColor={ticker1Visible ? 'white' : 'black'}
+              bgColor={tickers.StocksTicker ? colors.border : 'lightgray'}
+              source={tickers.StocksTicker ? ICONS.MINUS : ICONS.PLUS}
+              onPress={() => {
+                tickers.StocksTicker
+                  ? dispatch(removeTicker('StocksTicker'))
+                  : dispatch(setTicker('StocksTicker'));
+              }}
+              tintColor={tickers.StocksTicker ? 'white' : 'black'}
             />
             <StockBanner scrollEnabled={false} loop={false} />
             <Dragger
@@ -169,10 +176,14 @@ const ManageLiveTicker = ({navigation}) => {
               },
             ]}>
             <ManageButton
-              bgColor={ticker2Visible ? colors.border : 'lightgray'}
-              source={ticker2Visible ? ICONS.MINUS : ICONS.PLUS}
-              onPress={() => setTicker2Visible(!ticker2Visible)}
-              tintColor={ticker2Visible ? 'white' : 'black'}
+              bgColor={tickers.SportsTicker ? colors.border : 'lightgray'}
+              source={tickers.SportsTicker ? ICONS.MINUS : ICONS.PLUS}
+              onPress={() => {
+                tickers.SportsTicker
+                  ? dispatch(removeTicker('SportsTicker'))
+                  : dispatch(setTicker('SportsTicker'));
+              }}
+              tintColor={tickers.SportsTicker ? 'white' : 'black'}
             />
             <SportsBanner scrollEnabled={false} loop={false} />
             <Dragger

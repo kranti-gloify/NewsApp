@@ -153,7 +153,7 @@ const MagDetail = ({navigation, route}) => {
             <Text style={[styles.text, {color: colors.text}]}>{frequency}</Text>
           </View>
           <View style={styles.reactionContainer}>
-            {/* <Pressable android_ripple={{color: 'lightgray', borderless: false}}>
+            <Pressable android_ripple={{color: 'lightgray', borderless: false}}>
               <Image
                 source={ICONS.LIKE}
                 style={[
@@ -166,7 +166,7 @@ const MagDetail = ({navigation, route}) => {
             </Pressable>
             <View
               style={[styles.borderRight, {borderRightColor: colors.icon}]}
-            /> */}
+            />
             <Pressable
               android_ripple={{color: 'lightgray', borderless: false}}
               onPress={() => handleShare(pdfLink)}>
@@ -178,7 +178,7 @@ const MagDetail = ({navigation, route}) => {
             <View
               style={[styles.borderRight, {borderRightColor: colors.icon}]}
             />
-            {/* {downloaded ? (
+            {downloaded ? (
               <Pressable
                 android_ripple={{color: 'lightgray', borderless: false}}
                 onPress={removeDownload}>
@@ -203,7 +203,7 @@ const MagDetail = ({navigation, route}) => {
                   style={[styles.reactionIcon, {tintColor: colors.icon}]}
                 />
               </Pressable>
-            )} */}
+            )}
           </View>
         </View>
       </Pressable>

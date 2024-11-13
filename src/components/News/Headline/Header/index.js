@@ -30,7 +30,7 @@ const Header = ({
 
   return (
     <View style={{width: horizontalScale(330)}}>
-      <View style={{height: verticalScale(300)}}>
+      <View>
         <View style={styles.categoryHeader}>
           <FlatList
             data={categories}

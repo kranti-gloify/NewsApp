@@ -13,6 +13,8 @@ import {
   SET_DOWNLOADS,
   REMOVE_DOWNLOADS,
   SET_FEEDBACK,
+  SET_TICKER,
+  REMOVE_TICKER,
 } from './userActionTypes';
 
 export const saveUserData = ({id, name, email, contact}) => ({
@@ -81,4 +83,14 @@ export const removeDownloads = ({item, title}) => ({
 export const saveFeedback = ({status, data}) => ({
   type: SET_FEEDBACK,
   payload: {status, data},
+});
+
+export const setTicker = tickerName => ({
+  type: SET_TICKER,
+  payload: tickerName,
+});
+
+export const removeTicker = tickerName => ({
+  type: REMOVE_TICKER,
+  payload: tickerName,
 });
